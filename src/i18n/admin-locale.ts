@@ -52,6 +52,8 @@ export type AdminMessages = {
   productsEnterName: string;
   productsPriceInvalid: string;
   productsUploadOrExample: string;
+  productsChooseFile: string;
+  productsNoFileChosen: string;
   productsAdded: string;
   productsNameRequired: string;
   productsPriceMinimum: string;
@@ -74,6 +76,33 @@ export type AdminMessages = {
   catalogHeadingSave: string;
   catalogHeadingSaved: string;
   catalogHeadingSaveError: string;
+  nextOrderSectionTitle: string;
+  nextOrderSectionIntro: string;
+  nextOrderEnableCountdown: string;
+  nextOrderAtLabel: string;
+  nextOrderClear: string;
+  countdownTextLabelNl: string;
+  countdownTextLabelEn: string;
+  nextOrderSaveSaving: string;
+  nextOrderSave: string;
+  nextOrderSaved: string;
+  nextOrderSaveError: string;
+  storefrontCopySectionTitle: string;
+  storefrontCopySectionIntro: string;
+  headerTaglineLabelNl: string;
+  headerTaglineLabelEn: string;
+  headerTitleLabelNl: string;
+  headerTitleLabelEn: string;
+  homeIntroLabelNl: string;
+  homeIntroLabelEn: string;
+  homeEmptyLabelNl: string;
+  homeEmptyLabelEn: string;
+  footerNoteLabelNl: string;
+  footerNoteLabelEn: string;
+  storefrontCopySaveSaving: string;
+  storefrontCopySave: string;
+  storefrontCopySaved: string;
+  storefrontCopySaveError: string;
   subscribersTitle: string;
   subscribersIntro: string;
   subscribersEmpty: string;
@@ -145,6 +174,8 @@ export const adminMessages: Record<ShopLocale, AdminMessages> = {
     productsPriceInvalid:
       "Voer een geldige EUR-prijs in (bijv. 12 of 12,99 of 12.99). Minimum €0,50.",
     productsUploadOrExample: "Upload een foto of kies een voorbeeldafbeelding.",
+    productsChooseFile: "Bestand kiezen",
+    productsNoFileChosen: "Geen bestand gekozen.",
     productsAdded: "Product toegevoegd.",
     productsNameRequired: "Naam is verplicht.",
     productsPriceMinimum: "Voer een geldige EUR-prijs in (minimum €0,50).",
@@ -171,6 +202,35 @@ export const adminMessages: Record<ShopLocale, AdminMessages> = {
     catalogHeadingSave: "Rubriek opslaan",
     catalogHeadingSaved: "Rubriek opgeslagen.",
     catalogHeadingSaveError: "Rubriek opslaan mislukt.",
+    nextOrderSectionTitle: "Nedtelling (startpagina)",
+    nextOrderSectionIntro:
+      "Stel een tijdstip in waarop de volgende bestelronde sluit. Als de tijd in de toekomst ligt, tonen we een aftellende klok op de startpagina.",
+    nextOrderEnableCountdown: "Countdown publiceren (toon op startpagina)",
+    nextOrderAtLabel: "Tijdstip (lokaal) — leeg maakt uit",
+    nextOrderClear: "Wissen",
+    countdownTextLabelNl: "Tekst — Nederlands",
+    countdownTextLabelEn: "Tekst — Engels",
+    nextOrderSaveSaving: "Opslaan…",
+    nextOrderSave: "Nedtelling opslaan",
+    nextOrderSaved: "Opgeslagen.",
+    nextOrderSaveError: "Opslaan mislukt.",
+    storefrontCopySectionTitle: "Teksten op de winkel (startpagina)",
+    storefrontCopySectionIntro:
+      "Laat velden leeg om de standaardteksten uit de taalbestanden te gebruiken. Alles wat je hier invult overschrijft de tekst op de winkel.",
+    headerTaglineLabelNl: "Header tagline — Nederlands",
+    headerTaglineLabelEn: "Header tagline — Engels",
+    headerTitleLabelNl: "Header titel — Nederlands",
+    headerTitleLabelEn: "Header titel — Engels",
+    homeIntroLabelNl: "Intro tekst — Nederlands",
+    homeIntroLabelEn: "Intro tekst — Engels",
+    homeEmptyLabelNl: "Lege catalogus tekst — Nederlands",
+    homeEmptyLabelEn: "Lege catalogus tekst — Engels",
+    footerNoteLabelNl: "Footer note — Nederlands",
+    footerNoteLabelEn: "Footer note — Engels",
+    storefrontCopySaveSaving: "Opslaan…",
+    storefrontCopySave: "Teksten opslaan",
+    storefrontCopySaved: "Opgeslagen.",
+    storefrontCopySaveError: "Opslaan mislukt.",
     subscribersTitle: "Marketing (e-mail)",
     subscribersIntro:
       "Klanten die akkoord gingen met aanbiedingen per e-mail. Eén rij per adres (nieuwste eerst): handig om te exporteren naar je mailtool.",
@@ -242,6 +302,8 @@ export const adminMessages: Record<ShopLocale, AdminMessages> = {
     productsPriceInvalid:
       "Enter a valid EUR price with cents (e.g. 12 or 12,99 or 12.99). Minimum €0.50.",
     productsUploadOrExample: "Upload a photo or pick a bundled example image.",
+    productsChooseFile: "Choose file",
+    productsNoFileChosen: "No file chosen.",
     productsAdded: "Product added.",
     productsNameRequired: "Name is required.",
     productsPriceMinimum: "Enter a valid EUR price (minimum €0.50).",
@@ -268,6 +330,35 @@ export const adminMessages: Record<ShopLocale, AdminMessages> = {
     catalogHeadingSave: "Save headline",
     catalogHeadingSaved: "Headline saved.",
     catalogHeadingSaveError: "Could not save headline.",
+    nextOrderSectionTitle: "Countdown (homepage)",
+    nextOrderSectionIntro:
+      "Set a cutoff time for the next order round. If the time is in the future, a live countdown clock shows on the homepage.",
+    nextOrderEnableCountdown: "Publish countdown (show on homepage)",
+    nextOrderAtLabel: "Time (local) — leave empty to clear",
+    nextOrderClear: "Clear",
+    countdownTextLabelNl: "Text — Dutch",
+    countdownTextLabelEn: "Text — English",
+    nextOrderSaveSaving: "Saving…",
+    nextOrderSave: "Save countdown",
+    nextOrderSaved: "Saved.",
+    nextOrderSaveError: "Could not save.",
+    storefrontCopySectionTitle: "Storefront copy (homepage)",
+    storefrontCopySectionIntro:
+      "Leave fields empty to use the default text from locale files. Any value entered here overrides the storefront text.",
+    headerTaglineLabelNl: "Header tagline — Dutch",
+    headerTaglineLabelEn: "Header tagline — English",
+    headerTitleLabelNl: "Header title — Dutch",
+    headerTitleLabelEn: "Header title — English",
+    homeIntroLabelNl: "Intro text — Dutch",
+    homeIntroLabelEn: "Intro text — English",
+    homeEmptyLabelNl: "Empty catalogue text — Dutch",
+    homeEmptyLabelEn: "Empty catalogue text — English",
+    footerNoteLabelNl: "Footer note — Dutch",
+    footerNoteLabelEn: "Footer note — English",
+    storefrontCopySaveSaving: "Saving…",
+    storefrontCopySave: "Save copy",
+    storefrontCopySaved: "Saved.",
+    storefrontCopySaveError: "Could not save.",
     subscribersTitle: "Marketing opt-ins",
     subscribersIntro:
       "Customers who opted in to receive offers by email. One row per address (newest placement first): useful for exporting to your mail tool.",

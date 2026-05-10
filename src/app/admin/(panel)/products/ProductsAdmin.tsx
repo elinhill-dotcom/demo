@@ -166,7 +166,7 @@ function CreateProductForm({ onCreated }: { onCreated: () => void }) {
       onCreated();
       setMsg(t.productsAdded);
     } catch (err) {
-      setMsg(err instanceof Error ? err.message : "Error.");
+      setMsg(err instanceof Error ? err.message : t.productsUnexpectedError);
     } finally {
       setBusy(false);
     }
@@ -222,14 +222,13 @@ function CreateProductForm({ onCreated }: { onCreated: () => void }) {
               </option>
             ))}
           </select>
-          <input
-            type="file"
+          <FilePicker
+            disabled={!!bundledPath || busy}
             accept="image/jpeg,image/png,image/webp"
-            disabled={!!bundledPath}
-            className="w-full text-sm text-stone-300 file:mr-3 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-black disabled:opacity-40"
-            onChange={(e) => {
-              const f =
-                e.target.files && e.target.files[0] ? e.target.files[0] : null;
+            buttonLabel={t.productsChooseFile}
+            emptyLabel={t.productsNoFileChosen}
+            value={file}
+            onChange={(f) => {
               setFile(f);
               if (f) setBundledPath("");
             }}
@@ -255,6 +254,57 @@ function CreateProductForm({ onCreated }: { onCreated: () => void }) {
         </div>
       </form>
     </section>
+  );
+}
+
+function FilePicker({
+  disabled,
+  accept,
+  buttonLabel,
+  emptyLabel,
+  value,
+  onChange,
+}: {
+  disabled: boolean;
+  accept: string;
+  buttonLabel: string;
+  emptyLabel: string;
+  value: File | null;
+  onChange: (f: File | null) => void;
+}) {
+  const [id] = useState(() => `file-${Math.random().toString(16).slice(2)}`);
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <input
+        id={id}
+        type="file"
+        accept={accept}
+        disabled={disabled}
+        className="sr-only"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
+      <label
+        htmlFor={id}
+        className={`inline-flex cursor-pointer items-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-black hover:bg-amber-100 transition-colors ${
+          disabled ? "pointer-events-none opacity-40" : ""
+        }`}
+      >
+        {buttonLabel}
+      </label>
+      <span className="text-xs text-stone-400">
+        {value?.name ?? emptyLabel}
+      </span>
+      {value ? (
+        <button
+          type="button"
+          disabled={disabled}
+          className="text-xs text-stone-300 hover:text-white disabled:opacity-40"
+          onClick={() => onChange(null)}
+        >
+          ×
+        </button>
+      ) : null}
+    </div>
   );
 }
 
@@ -336,7 +386,7 @@ function ProductEditor({
       onChanged();
       setMsg(t.productsSaved);
     } catch (err) {
-      setMsg(err instanceof Error ? err.message : "Error.");
+      setMsg(err instanceof Error ? err.message : t.productsUnexpectedError);
     } finally {
       setBusy(false);
     }
@@ -363,7 +413,7 @@ function ProductEditor({
       }
       onChanged();
     } catch (err) {
-      setMsg(err instanceof Error ? err.message : "Error.");
+      setMsg(err instanceof Error ? err.message : t.productsUnexpectedError);
     } finally {
       setBusy(false);
     }
@@ -421,16 +471,16 @@ function ProductEditor({
           </label>
           <label className="block text-sm">
             <span className="mb-1 block text-stone-300">{t.productsReplacePhoto}</span>
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="w-full text-sm text-stone-300 file:mr-3 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-1 file:text-xs file:font-semibold file:text-black"
-              onChange={(e) =>
-                setReplaceFile(
-                  e.target.files?.[0] ? e.target.files[0] : null,
-                )
-              }
-            />
+            <div className="mt-1">
+              <FilePicker
+                disabled={busy}
+                accept="image/jpeg,image/png,image/webp"
+                buttonLabel={t.productsChooseFile}
+                emptyLabel={t.productsNoFileChosen}
+                value={replaceFile}
+                onChange={setReplaceFile}
+              />
+            </div>
           </label>
         </div>
         <div className="flex flex-wrap items-center gap-3">

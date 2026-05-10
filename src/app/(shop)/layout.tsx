@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { FooterNote } from "@/components/FooterNote";
 import { getShopLocale } from "@/lib/shop-locale-server";
 import { shopMessages, shopMeta } from "@/i18n/shop-locale";
+import { prisma } from "@/lib/prisma";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getShopLocale();
@@ -26,13 +27,26 @@ export default async function ShopLayout({
 }>) {
   const locale = await getShopLocale();
   const messages = shopMessages[locale];
+  const settingsRow = await prisma.appSettings.findUnique({ where: { id: 1 } });
+  const headerTagline =
+    (locale === "nl"
+      ? settingsRow?.headerTaglineNl?.trim()
+      : settingsRow?.headerTaglineEn?.trim()) || "";
+  const headerTitle =
+    (locale === "nl"
+      ? settingsRow?.headerTitleNl?.trim()
+      : settingsRow?.headerTitleEn?.trim()) || "";
+  const footerNote =
+    (locale === "nl"
+      ? settingsRow?.footerNoteNl?.trim()
+      : settingsRow?.footerNoteEn?.trim()) || "";
 
   return (
     <CartProvider>
       <ShopLocaleProvider locale={locale} messages={messages}>
-        <SiteHeader />
+        <SiteHeader headerTagline={headerTagline} headerTitle={headerTitle} />
         <div className="flex flex-1 flex-col bg-[#faf7f2]">{children}</div>
-        <FooterNote />
+        <FooterNote footerNote={footerNote} />
       </ShopLocaleProvider>
     </CartProvider>
   );

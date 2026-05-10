@@ -65,6 +65,12 @@ export type ShopMessages = {
   notFoundLine1: string;
   notFoundLine2Start: string;
   notFoundLine2End: string;
+  countdownUnitDays: string;
+  countdownUnitHours: string;
+  countdownUnitMinutes: string;
+  countdownUnitSeconds: string;
+  /** Shown under the countdown when admin left the message empty */
+  countdownDefaultReminder: string;
 };
 
 export const shopMessages: Record<ShopLocale, ShopMessages> = {
@@ -118,6 +124,12 @@ export const shopMessages: Record<ShopLocale, ShopMessages> = {
     notFoundLine1: "Misschien is de link verouderd.",
     notFoundLine2Start: "De bedankpagina staat nu op ",
     notFoundLine2End: " (niet meer /checkout/tack).",
+    countdownUnitDays: "dagen",
+    countdownUnitHours: "uren",
+    countdownUnitMinutes: "minuten",
+    countdownUnitSeconds: "seconden",
+    countdownDefaultReminder:
+      "Bestel snel je favoriete kaas — de volgende ronde sluit over",
   },
   en: {
     tagline: "Home delivery",
@@ -168,5 +180,11 @@ export const shopMessages: Record<ShopLocale, ShopMessages> = {
     notFoundLine1: "This link may be out of date.",
     notFoundLine2Start: "The thank-you page is now at ",
     notFoundLine2End: " (no longer /checkout/tack).",
+    countdownUnitDays: "days",
+    countdownUnitHours: "hours",
+    countdownUnitMinutes: "minutes",
+    countdownUnitSeconds: "seconds",
+    countdownDefaultReminder:
+      "Hurry and put in an order for your favourite cheese — this round closes in",
   },
 };

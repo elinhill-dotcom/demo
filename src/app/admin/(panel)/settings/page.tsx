@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { getShopLocale } from "@/lib/shop-locale-server";
 import { CatalogHeadingForm } from "./CatalogHeadingForm";
 import { CheckoutNoticeForm } from "./CheckoutNoticeForm";
+import { NextOrderCountdownForm } from "./NextOrderCountdownForm";
+import { StorefrontCopyForm } from "./StorefrontCopyForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getShopLocale();
@@ -21,6 +23,20 @@ export default async function AdminCheckoutSettingsPage() {
       checkoutNotice: "",
       homeHeadingNl: "",
       homeHeadingEn: "",
+      nextOrderAt: null,
+      countdownEnabled: false,
+      countdownTextNl: "",
+      countdownTextEn: "",
+      headerTaglineNl: "",
+      headerTaglineEn: "",
+      headerTitleNl: "",
+      headerTitleEn: "",
+      homeIntroTextNl: "",
+      homeIntroTextEn: "",
+      homeEmptyTextNl: "",
+      homeEmptyTextEn: "",
+      footerNoteNl: "",
+      footerNoteEn: "",
     },
     update: {},
   });
@@ -50,6 +66,40 @@ export default async function AdminCheckoutSettingsPage() {
           <CatalogHeadingForm
             initialHomeHeadingNl={settings.homeHeadingNl ?? ""}
             initialHomeHeadingEn={settings.homeHeadingEn ?? ""}
+          />
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 pt-10">
+        <h2 className="text-lg font-semibold text-white">
+          {t.nextOrderSectionTitle}
+        </h2>
+        <div className="mt-6">
+          <NextOrderCountdownForm
+            initialNextOrderAt={settings.nextOrderAt ? settings.nextOrderAt.toISOString() : null}
+            initialCountdownEnabled={settings.countdownEnabled ?? false}
+            initialCountdownTextNl={settings.countdownTextNl ?? ""}
+            initialCountdownTextEn={settings.countdownTextEn ?? ""}
+          />
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 pt-10">
+        <h2 className="text-lg font-semibold text-white">
+          {t.storefrontCopySectionTitle}
+        </h2>
+        <div className="mt-6">
+          <StorefrontCopyForm
+            initialHeaderTaglineNl={settings.headerTaglineNl ?? ""}
+            initialHeaderTaglineEn={settings.headerTaglineEn ?? ""}
+            initialHeaderTitleNl={settings.headerTitleNl ?? ""}
+            initialHeaderTitleEn={settings.headerTitleEn ?? ""}
+            initialHomeIntroTextNl={settings.homeIntroTextNl ?? ""}
+            initialHomeIntroTextEn={settings.homeIntroTextEn ?? ""}
+            initialHomeEmptyTextNl={settings.homeEmptyTextNl ?? ""}
+            initialHomeEmptyTextEn={settings.homeEmptyTextEn ?? ""}
+            initialFooterNoteNl={settings.footerNoteNl ?? ""}
+            initialFooterNoteEn={settings.footerNoteEn ?? ""}
           />
         </div>
       </section>

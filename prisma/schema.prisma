@@ -13,6 +13,20 @@ model AppSettings {
   checkoutNotice  String @default("")
   homeHeadingNl   String @default("")
   homeHeadingEn   String @default("")
+  nextOrderAt     DateTime?
+  countdownEnabled Boolean @default(false)
+  countdownTextNl String @default("")
+  countdownTextEn String @default("")
+  headerTaglineNl String @default("")
+  headerTaglineEn String @default("")
+  headerTitleNl   String @default("")
+  headerTitleEn   String @default("")
+  homeIntroTextNl String @default("")
+  homeIntroTextEn String @default("")
+  homeEmptyTextNl String @default("")
+  homeEmptyTextEn String @default("")
+  footerNoteNl    String @default("")
+  footerNoteEn    String @default("")
 }
 
 model Product {

@@ -2,14 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LocaleToggle } from "@/components/LocaleToggle";
 import { useCart } from "@/context/cart-context";
 import { useShopLocale, useShopT } from "@/context/shop-locale-context";
 
-export function SiteHeader() {
+export function SiteHeader({
+  headerTagline,
+  headerTitle,
+}: {
+  headerTagline?: string;
+  headerTitle?: string;
+}) {
   const t = useShopT();
   const locale = useShopLocale();
   const { itemCount } = useCart();
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
+  const isCheckout = pathname === "/checkout";
 
   return (
     <header className="border-b border-stone-200 bg-black text-white">
@@ -24,15 +35,22 @@ export function SiteHeader() {
           />
           <div>
             <p className="text-xs uppercase tracking-widest text-amber-200/90">
-              {t.tagline}
+              {headerTagline?.trim().length ? headerTagline : t.tagline}
             </p>
-            <p className="font-semibold text-lg leading-tight">{t.shopTitle}</p>
+            <p className="font-semibold text-lg leading-tight">
+              {headerTitle?.trim().length ? headerTitle : t.shopTitle}
+            </p>
           </div>
         </Link>
         <nav className="flex flex-wrap items-center justify-end gap-3 sm:gap-4 text-sm sm:ml-auto">
           <Link
             href="/"
-            className="text-white/90 hover:text-amber-200 transition-colors"
+            aria-current={isHome ? "page" : undefined}
+            className={
+              isHome
+                ? "text-amber-200 font-semibold"
+                : "text-white/90 hover:text-amber-200 transition-colors"
+            }
           >
             {t.navProducts}
           </Link>
@@ -40,7 +58,12 @@ export function SiteHeader() {
             href="/checkout"
             title={t.navCheckout}
             aria-label={`${t.navCart}${itemCount > 0 ? ` (${itemCount})` : ""}`}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-medium text-black hover:bg-amber-100 transition-colors"
+            aria-current={isCheckout ? "page" : undefined}
+            className={
+              isCheckout
+                ? "inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2 font-semibold text-black hover:bg-amber-100 transition-colors"
+                : "inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-medium text-black hover:bg-amber-100 transition-colors"
+            }
           >
             <span>{t.navCart}</span>
             {itemCount > 0 ? (
