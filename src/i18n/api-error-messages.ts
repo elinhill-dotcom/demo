@@ -17,6 +17,8 @@ export const API_ERROR_CODES = [
   "UPLOAD_MEDIA_INVALID",
   "UPLOAD_FILE_TOO_LARGE",
   "UPLOAD_TYPE_UNKNOWN",
+  "STORAGE_NOT_CONFIGURED",
+  "UPLOAD_STORAGE_FAILED",
 ] as const;
 
 export type ApiErrorCode = (typeof API_ERROR_CODES)[number];
@@ -83,6 +85,16 @@ export const apiErrorMessages: Record<ApiErrorCode, { nl: string; en: string }> 
       nl: "Onbekend afbeeldingstype.",
       en: "Unknown image type.",
     },
+    STORAGE_NOT_CONFIGURED: {
+      nl:
+        "Afbeeldingenopslag is niet geconfigureerd. Stel NEXT_PUBLIC_SUPABASE_URL en NEXT_PUBLIC_SUPABASE_ANON_KEY in.",
+      en:
+        "Image storage is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+    },
+    UPLOAD_STORAGE_FAILED: {
+      nl: "Kon de afbeelding niet opslaan. Probeer het later opnieuw.",
+      en: "Could not save the image. Please try again later.",
+    },
   };
 
 export function resolveApiMessageForLocale(
@@ -91,7 +103,10 @@ export function resolveApiMessageForLocale(
   fallback: string,
 ): string {
   if (!payload || typeof payload !== "object") return fallback;
-  const raw = payload as { code?: unknown; error?: unknown };
+  const raw = payload as { code?: unknown; error?: unknown; detail?: unknown };
+  if (typeof raw.detail === "string" && raw.detail.trim().length > 0) {
+    return raw.detail.trim();
+  }
   if (typeof raw.code === "string" && raw.code in apiErrorMessages) {
     const row = apiErrorMessages[raw.code as ApiErrorCode];
     return locale === "nl" ? row.nl : row.en;

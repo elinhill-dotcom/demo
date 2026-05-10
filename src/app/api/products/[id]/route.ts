@@ -4,6 +4,7 @@ import {
   verifyAdminSessionToken,
 } from "@/lib/session";
 import { apiJsonError } from "@/lib/api-errors";
+import { deleteProductImageByPublicUrl } from "@/lib/supabase-storage";
 import { unlink } from "node:fs/promises";
 import { join } from "node:path";
 import { cookies } from "next/headers";
@@ -14,7 +15,7 @@ const updateSchema = z.object({
   name: z.string().trim().min(1).max(200).optional(),
   description: z.string().trim().max(8000).optional(),
   priceCents: z.number().int().min(50).max(5_000_000).optional(),
-  imagePath: z.string().trim().min(1).max(500).optional(),
+  imagePath: z.string().trim().min(1).max(2048).optional(),
   active: z.boolean().optional(),
 });
 
@@ -54,14 +55,16 @@ export async function PATCH(
     });
 
     const newPath = parsed.data.imagePath;
-    if (
-      newPath &&
-      newPath !== before.imagePath &&
-      before.imagePath.startsWith("/uploads/products/") &&
-      !before.imagePath.includes("..")
-    ) {
-      const diskPath = join(process.cwd(), "public", before.imagePath);
-      unlink(diskPath).catch(() => undefined);
+    if (newPath && newPath !== before.imagePath) {
+      if (
+        before.imagePath.startsWith("/uploads/products/") &&
+        !before.imagePath.includes("..")
+      ) {
+        const diskPath = join(process.cwd(), "public", before.imagePath);
+        unlink(diskPath).catch(() => undefined);
+      } else {
+        void deleteProductImageByPublicUrl(before.imagePath);
+      }
     }
 
     return NextResponse.json(updated);
@@ -87,7 +90,7 @@ export async function DELETE(
     return apiJsonError("NOT_FOUND", 404);
   }
 
-  const pathSafe =
+  const legacyDiskPath =
     existing.imagePath.startsWith("/uploads/products/") &&
     !existing.imagePath.includes("..");
 
@@ -97,9 +100,11 @@ export async function DELETE(
   });
   await prisma.product.delete({ where: { id } });
 
-  if (pathSafe) {
+  if (legacyDiskPath) {
     const diskPath = join(process.cwd(), "public", existing.imagePath);
     unlink(diskPath).catch(() => undefined);
+  } else {
+    void deleteProductImageByPublicUrl(existing.imagePath);
   }
 
   return NextResponse.json({ ok: true });

@@ -3,9 +3,10 @@ import {
   verifyAdminSessionToken,
 } from "@/lib/session";
 import { apiJsonError } from "@/lib/api-errors";
-import { randomBytes } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import {
+  isSupabaseConfigured,
+  uploadProductImage,
+} from "@/lib/supabase-storage";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -25,6 +26,10 @@ export async function POST(request: Request) {
     !verifyAdminSessionToken(jar.get(ADMIN_SESSION_COOKIE)?.value)
   ) {
     return apiJsonError("UNAUTHORIZED", 401);
+  }
+
+  if (!isSupabaseConfigured()) {
+    return apiJsonError("STORAGE_NOT_CONFIGURED", 503);
   }
 
   const formData = await request.formData().catch(() => null);
@@ -49,11 +54,23 @@ export async function POST(request: Request) {
   const ext = extFromType(file.type);
   if (!ext) return apiJsonError("UPLOAD_TYPE_UNKNOWN", 400);
 
-  const name = `${Date.now()}-${randomBytes(6).toString("hex")}.${ext}`;
-  const dir = join(process.cwd(), "public", "uploads", "products");
-  await mkdir(dir, { recursive: true });
-  const diskPath = join(dir, name);
-  await writeFile(diskPath, buf);
+  const result = await uploadProductImage({
+    buffer: buf,
+    contentType: file.type,
+    ext,
+  });
 
-  return NextResponse.json({ path: `/uploads/products/${name}` });
+  if ("errorMessage" in result) {
+    const detail = result.errorMessage.trim();
+    return NextResponse.json(
+      {
+        code: "UPLOAD_STORAGE_FAILED" as const,
+        detail: detail.length > 0 ? detail : undefined,
+        error: detail.length > 0 ? detail : undefined,
+      },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json({ path: result.publicUrl });
 }

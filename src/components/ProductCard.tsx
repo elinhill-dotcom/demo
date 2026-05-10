@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ShopLocale } from "@/i18n/shop-locale";
+import { shouldUnoptimizeImageSrc } from "@/lib/image-delivery";
 import { formatEuro } from "@/lib/money";
 import { ProductOrderControls } from "./ProductOrderControls";
 
@@ -21,10 +22,7 @@ export function ProductCard({
   locale: ShopLocale;
 }) {
   const img = product.imagePath || "/placeholder-cheese.svg";
-  const unoptimized =
-    img.startsWith("/uploads") ||
-    img.startsWith("/examples") ||
-    img === "/placeholder-cheese.svg";
+  const unoptimized = shouldUnoptimizeImageSrc(img);
 
   return (
     <article className="flex flex-col rounded-xl border border-stone-200 bg-white shadow-sm overflow-hidden">

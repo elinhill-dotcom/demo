@@ -7,6 +7,7 @@ import { formatEuro } from "@/lib/money";
 import { parseEuroInputToCents } from "@/lib/price-input";
 import { bundledExampleImages } from "@/lib/bundled-example-images";
 import { resolveApiMessageForLocale } from "@/i18n/api-error-messages";
+import { shouldUnoptimizeImageSrc } from "@/lib/image-delivery";
 
 type ProductRow = {
   id: string;
@@ -282,10 +283,7 @@ function ProductEditor({
 
   const preview = useMemo(() => product.imagePath, [product.imagePath]);
 
-  const imgNeedsUnoptimized =
-    preview.startsWith("/uploads") ||
-    preview.startsWith("/examples") ||
-    preview === "/placeholder-cheese.svg";
+  const imgNeedsUnoptimized = shouldUnoptimizeImageSrc(preview);
 
   async function onSave(e: FormEvent) {
     e.preventDefault();

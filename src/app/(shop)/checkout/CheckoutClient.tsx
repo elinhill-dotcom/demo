@@ -10,6 +10,7 @@ import {
   useShopT,
 } from "@/context/shop-locale-context";
 import { resolveApiMessageForLocale } from "@/i18n/api-error-messages";
+import { shouldUnoptimizeImageSrc } from "@/lib/image-delivery";
 import { formatEuro } from "@/lib/money";
 
 export function CheckoutClient({
@@ -81,14 +82,6 @@ export function CheckoutClient({
     } finally {
       setBusy(false);
     }
-  }
-
-  function lineImageUnoptimized(path: string): boolean {
-    return (
-      path.startsWith("/uploads") ||
-      path.startsWith("/examples") ||
-      path === "/placeholder-cheese.svg"
-    );
   }
 
   if (lines.length === 0) {
@@ -224,7 +217,7 @@ export function CheckoutClient({
                       alt=""
                       fill
                       className="object-cover"
-                      unoptimized={lineImageUnoptimized(l.imagePath)}
+                      unoptimized={shouldUnoptimizeImageSrc(l.imagePath)}
                     />
                   </div>
                   <div className="min-w-0">

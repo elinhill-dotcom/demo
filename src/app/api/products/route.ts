@@ -12,7 +12,7 @@ const createSchema = z.object({
   name: z.string().trim().min(1).max(200),
   description: z.string().trim().max(8000),
   priceCents: z.number().int().min(50).max(5_000_000),
-  imagePath: z.string().trim().min(1).max(500),
+  imagePath: z.string().trim().min(1).max(2048),
 });
 
 export async function GET() {
