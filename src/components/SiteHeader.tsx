@@ -42,14 +42,14 @@ export function SiteHeader({
             </p>
           </div>
         </Link>
-        <nav className="flex flex-wrap items-center justify-end gap-3 sm:gap-4 text-sm sm:ml-auto">
+        <nav className="flex flex-wrap items-center justify-end gap-2 sm:gap-3 text-sm sm:ml-auto">
           <Link
             href="/"
             aria-current={isHome ? "page" : undefined}
             className={
               isHome
-                ? "text-amber-200 font-semibold"
-                : "text-white/90 hover:text-amber-200 transition-colors"
+                ? "inline-flex items-center rounded-full bg-amber-200 px-4 py-2 font-semibold text-black shadow-sm ring-2 ring-amber-50/80 transition-colors hover:bg-amber-100"
+                : "inline-flex items-center rounded-full border border-transparent px-4 py-2 font-medium text-white/80 transition-colors hover:border-white/15 hover:bg-white/5 hover:text-amber-100"
             }
           >
             {t.navProducts}
@@ -61,13 +61,19 @@ export function SiteHeader({
             aria-current={isCheckout ? "page" : undefined}
             className={
               isCheckout
-                ? "inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2 font-semibold text-black hover:bg-amber-100 transition-colors"
-                : "inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-medium text-black hover:bg-amber-100 transition-colors"
+                ? "inline-flex items-center gap-2 rounded-full bg-amber-200 px-4 py-2 font-semibold text-black shadow-sm ring-2 ring-amber-50/80 transition-colors hover:bg-amber-100"
+                : "inline-flex items-center gap-2 rounded-full border border-white/25 bg-transparent px-4 py-2 font-medium text-white/90 transition-colors hover:border-amber-200/55 hover:bg-white/5 hover:text-amber-100"
             }
           >
             <span>{t.navCart}</span>
             {itemCount > 0 ? (
-              <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-semibold text-black tabular-nums">
+              <span
+                className={
+                  isCheckout
+                    ? "rounded-full bg-amber-600/20 px-2 py-0.5 text-xs font-semibold text-black tabular-nums"
+                    : "rounded-full bg-amber-400/25 px-2 py-0.5 text-xs font-semibold text-amber-100 tabular-nums"
+                }
+              >
                 {itemCount}
               </span>
             ) : null}
